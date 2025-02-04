@@ -84,39 +84,26 @@
 </div>
 
 <script>
-async function sendMessage() {
-    const userInput = document.getElementById("user-input");
-    const message = userInput.value.trim();
-    if (!message) return;
+    // ✅ Define the n8n Webhook URL
+    const n8nWebhookUrl = "https://frankoluci.app.n8n.cloud/webhook/aiwaiterchatbot"; // Replace this if needed
 
-    appendMessage(message, true);
-    userInput.value = "";
-
-    try {
-        const response = await fetch("https://frankoluci.app.n8n.cloud/webhook/aiwaiterchatbot", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: message })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Server responded with ${response.status}`);
-        }
-
-        const data = await response.json();
-        appendMessage(data.response || "No response from AI.");
-    } catch (error) {
-        appendMessage(`Error: ${error.message}`);
-        console.error("Chatbot Error:", error);
+    // ✅ Function to Append Messages to Chatbox
+    function appendMessage(text, isUser = false) {
+        const chatBox = document.getElementById("chat-box");
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add(isUser ? "user-message" : "bot-message");
+        messageDiv.textContent = text;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
-}
 
-
+    // ✅ Function to Send Message to n8n Webhook
     async function sendMessage() {
         const userInput = document.getElementById("user-input");
         const message = userInput.value.trim();
         if (!message) return;
 
+        // Display user message in chat
         appendMessage(message, true);
         userInput.value = "";
 
@@ -126,13 +113,20 @@ async function sendMessage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ query: message })
             });
+
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+
             const data = await response.json();
-            appendMessage(data.response || "Sorry, I didn't understand that.");
+            appendMessage(data.response || "No response from AI.");
         } catch (error) {
             appendMessage("Error connecting to AI.");
+            console.error("Chatbot Error:", error);
         }
     }
-sendMessage()
+
+    // ✅ Allow Pressing "Enter" to Send Message
     function handleKeyPress(event) {
         if (event.key === "Enter") {
             sendMessage();
