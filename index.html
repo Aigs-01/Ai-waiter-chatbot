@@ -84,10 +84,9 @@
 </div>
 
 <script>
-    // ✅ Define the n8n Webhook URL
-    const n8nWebhookUrl = "https://frankoluci.app.n8n.cloud/webhook/aiwaiterchatbot"; // Replace this if needed
 
-    // ✅ Function to Append Messages to Chatbox
+    const n8nWebhookUrl = "https://frankoluci.app.n8n.cloud/webhook/aiwaiterchatbot"; 
+
     function appendMessage(text, isUser = false) {
         const chatBox = document.getElementById("chat-box");
         const messageDiv = document.createElement("div");
@@ -97,7 +96,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // ✅ Function to Send Message to n8n Webhook
+  
     async function sendMessage() {
         const userInput = document.getElementById("user-input");
         const message = userInput.value.trim();
@@ -126,7 +125,7 @@
         }
     }
 
-    // ✅ Allow Pressing "Enter" to Send Message
+  
     function handleKeyPress(event) {
         if (event.key === "Enter") {
             sendMessage();
